@@ -39,7 +39,8 @@ steps:
     fi
   workingDirectory: '$(modulePath)'
   displayName: 'Download dep and run `dep ensure`'
-  docker build -f Dockerfile -t $(imageName) .
+
+- script: docker build -f Dockerfile -t $(imageName) .
   displayName: 'docker build'
 
 - script: go build -v .
