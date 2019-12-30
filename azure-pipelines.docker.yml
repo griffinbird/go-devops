@@ -10,13 +10,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  GOPATH: '$(Agent.BuildDirectory)/gopath' # Go workspace path
+  GOROOT: '$(Agent.BuildDirectory)/go' # Go installation path
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
-  GOROOT: '/usr/local/go1.13' # Go installation path
-  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)/app-code' # Path to the module's code
+  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
   imageName: 'pipelines-go:$(build.buildId)'
 
 steps:
+- script: |
+    wget "https://storage.googleapis.com/golang/go1.12.3.linux-amd64.tar.gz" --output-document "$(Agent.BuildDirectory)/go1.12.3.tar.gz"
+    tar -C '$(Agent.BuildDirectory)' -xzf "$(Agent.BuildDirectory)/go1.12.3.tar.gz"
+  displayName: 'Install Go 1.12'
+
 - script: |
     mkdir -p '$(GOBIN)'
     mkdir -p '$(GOPATH)/pkg'
