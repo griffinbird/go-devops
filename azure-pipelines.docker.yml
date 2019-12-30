@@ -33,7 +33,8 @@ steps:
     echo '##vso[task.prependpath]$(GOROOT)/bin'
   displayName: 'Set up the Go workspace'
 
-- script: go get -v -t -d ./...
+- script: | 
+  go get -v -t -d ./...
   workingDirectory: '$(modulePath)'
   displayName: 'go get dependencies'
 
@@ -48,7 +49,8 @@ steps:
 #- script: docker build -f Dockerfile -t $(imageName) .
 #  displayName: 'docker build'
 
-- script: go build -v .
+- script: |
+  GOOS=linux GOARCH=amd64 go build -tags netgo -o http-sample
   workingDirectory: '$(modulePath)'
   displayName: 'Build'
 
